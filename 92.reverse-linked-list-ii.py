@@ -12,16 +12,18 @@
 #         self.next = next
 class Solution:
     def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
-        node = Node(0, head)
-        i = 1
-        while node:
-            if i == left - 1:
-                left_node = node
-            if i == right + 1:
-                right_node = node
-            node = node.next
-            i += 1
-        while
+        res = ListNode(0, head)
+        left_node = res
+        for _ in range(left - 1):
+            left_node = left_node.next
+        node = left_node.next
+        for _ in range(right-left):
+            next = node.next
+            node.next = next.next
+            next.next = left_node.next
+            left_node.next = next
+        return res.next
+
         
 # @lc code=end
 
