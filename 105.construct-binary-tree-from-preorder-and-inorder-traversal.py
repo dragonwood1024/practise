@@ -12,7 +12,23 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        def subtree(preleft, preright, inleft, inright):
+            if preleft > preright:
+                return None
+            root = preorder[preleft]
+            rootidx = indices[root]
+            sublen = rootidx - inleft
+            node = TreeNode(root)
+
+            node.left = subtree(preleft+1, preleft+sublen, inleft, rootidx-1)
+            node.right = subtree(preleft+sublen+1, preright, rootidx+1, inright)
+
+            return node
+
+        n = len(preorder)
+        indices = {val : idx for idx, val in enumerate(inorder)}
+        return subtree(0, n-1, 0, n-1)
+
 # @lc code=end
 
