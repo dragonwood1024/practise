@@ -9,34 +9,29 @@
 
 class Solution:
     def restoreIpAddresses(self, s: str) -> List[str]:
-        n = len(s)
         res = []
-        cur = [0]*4
+        current = [0] * 4
 
-        def dfs(pos, idx):
-            if pos == 4:
-                if idx == n:
-                    ip = ".".join(str(c) for c in cur)
-                    res.append(ip)
+        def find(index, start):
+            if index == 4 and start == len(s):
+                res.append('.'.join(str(addr) for addr in current))
                 return
-            if idx == n:
-                return
-            if s[idx] == "0":
-                cur[pos] = 0
-                dfs(pos+1, idx+1)
-            
-            sum = 0
-            for i in range(idx, n):
-                sum = sum * 10 + int(s[i])
-                if 0 < sum <= 0xFF:
-                    cur[pos] = sum
-                    dfs(pos+1, i+1)
-                else:
-                    break
 
-        dfs(0, 0)
+            if index == 4 or start == len(s):
+                return
+
+            if s[start] == '0':
+                current[index] = '0'
+                find(index + 1, start + 1)
+                return
+
+            add = 0
+            for end in range(start, min(len(s), start + 3)):
+                add = add * 10 + ord(s[end]) - ord('0')
+                if add <= 255:
+                    current[index] = str(add)
+                    find(index + 1, end + 1)
+        find(0, 0)
         return res
 
-        
 # @lc code=end
-
